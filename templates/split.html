@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>拆分章节</p>
+  <div class="filelist">
+    <div id="file-list"></div>
+  </div>
+  <div class="control">
+    <div>
+      <input type="text" id="split-regex" value="第\s*(.*)章"> <button id="split-regex-submit">Split</button>
+    </div>
+  </div>
+
+  <input type="text" id="count">
+  <div class="preview"></div>
+</body>
+<script src="/static/comm.js"></SCRIPT>
+<script src="/static/split.js"></SCRIPT>
+
+</html>
