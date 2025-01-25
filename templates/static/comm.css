@@ -1,0 +1,91 @@
+/*滚动条样式*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #575f5f;
+  border-radius: 16px;
+  /* background-color: var(--bg-white-mask); */
+}
+
+/*滑块样式*/
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background-color: #99a4b1;
+  /* background-color: rgba(1, 1, 1, 0.15); */
+  width: 16px;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  border-radius: 16px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+* {
+  background-color: rgb(66, 69, 83);
+  color: white;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+a:hover {
+  color: #5e9faf;
+  translate: all 0.2s ease-in-out;
+}
+
+button {
+  background-color: #497b88;
+  border: none;
+  color: white;
+  padding: 4px 2px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #3c6370;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 0.5rem;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: #3c6370;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-item {
+  min-width: 280px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+.form-item label {
+  text-align: left;
+}

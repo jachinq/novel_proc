@@ -4,23 +4,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Split with Chapter</title>
 </head>
 
 <body>
-  <p>拆分章节</p>
-  <div class="filelist">
-    <div id="file-list"></div>
-  </div>
-  <div class="control">
-    <div>
-      <input type="text" id="split-regex" value="第\s*(.*)章"> <button id="split-regex-submit">Split</button>
-    </div>
-  </div>
+  <div class="container">
 
-  <input type="text" id="count">
-  <div class="preview"></div>
+    <div>
+      <span>Split with Chapter</span>
+      <a href="/">Back to Home</a>
+    </div>
+    <div class="filelist">
+      <div id="file-list"></div>
+    </div>
+    <div class="control">
+      <div class="flex-col">
+        <div>
+          <label for="split-regex">&nbsp;&nbsp;&nbsp;正则</label>
+          <input type="text" id="split-regex" value="第\s*(.*)章"> 
+        </div>
+        <div>
+          <label for="count">分割数</label>
+          <input type="text" id="count">
+        </div>
+        <button id="split-regex-submit">Split</button>
+      </div>
+    </div>
+
+    <div class="preview"></div>
+  </div>
 </body>
+<link rel="stylesheet" href="/static/comm.css">
 <script src="/static/comm.js"></SCRIPT>
 <script src="/static/split.js"></SCRIPT>
 

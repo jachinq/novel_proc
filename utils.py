@@ -2,8 +2,15 @@ import os
 import re
 import random
 from ebooklib import epub
+from sanic.response import json
+from sanic.response import JSONResponse
 
-def split_chapter(regex, data: str, chapterNameLimit: int = 200):
+def error(message: str, data: dict = {}):
+    return json({"success": False, "message": message, 'data': data})
+def success(message='操作成功', data: dict = {}):
+    return json({"success": True, "message": message, 'data': data})
+
+def split_chapter(regex, data: str, chapterNameLimit: int = 40):
     # 正则匹配章节标题
     chapter_pattern = re.compile(regex)
     # 查找所有匹配的章节名
@@ -26,6 +33,9 @@ def split_chapter(regex, data: str, chapterNameLimit: int = 200):
             contents = []
         else:
             contents.append(line)
+    
+    if len(chapters) == 0:
+        chapters.append(('Unkown', contents))
     
     return chapters # [(chapter_name, contents), (chapter_name, contents), ...]
 
@@ -87,7 +97,6 @@ def split_book_by_chapters_count(chapters, count):
     for i, filepname in enumerate(file_list):
         # print(f"分割文件 {file}...")
         # with open(file, 'w', encoding='utf-8') as f:
-        file_content = ""
         start = i * count
         end = (i+1) * count
         # 取出当前要处理的sublist
@@ -137,20 +146,22 @@ def get_epub_book_dir(title=''):
 
     return epub_path
 
-def convert_txt_to_epub(split_chapters: list, index, title, author):
-    epub_path = f"{get_epub_book_dir(title)}/{index}.epub"
+def convert_txt_to_epub(split_chapters: list, index, title, author, filename):
+    epub_path = f"{get_epub_book_dir(filename)}/{title}_{index}.epub"
 
     # 计算出章节数
     chapter_count = len(split_chapters)
     # 计算出章节位数
     max_length = len(str(chapter_count))
+    
+    cover_path = 'templates/uploads/cover.jpg'
 
     # 创建EpubBook对象
     book = epub.EpubBook()
     book.set_title(title)
     book.add_author(author)
     book.set_language('zh-CN')
-    book.set_cover('cover.jpg', open('cover.jpg', 'rb').read())
+    book.set_cover('cover.jpg', open(cover_path, 'rb').read())
 
     # cover_html = f'<html><head><title>Cover</title></head><body><div><img src="images/cover.jpg" alt="书籍封面"/></div></body></html>'
     # cover = epub.EpubHtml(title='封面', file_name='cover.xhtml', lang='zh-CN', content=cover_html)
@@ -197,6 +208,43 @@ def convert_txt_to_html(chapter: str, lines: list):
         html_content += f"<p>{line}</p>"
     html_content += '</body></html>'
     return html_content
+
+def get_spit_epub_files(file_path):
+    if not os.path.exists(file_path):
+        return ([],[])
+
+    filename = os.path.basename(file_path)
+    # 拿 split 文件夹下的文件名
+    split_dir = f'templates/split/{filename}'
+    split_files = []
+    if os.path.exists(split_dir):
+        for filename in os.listdir(split_dir):
+            split_files.append(f"{split_dir}/{filename}")
+    # 拿 epub 文件夹下的文件名
+    epub_dir = get_epub_book_dir(filename)
+    epub_files = []
+    if os.path.exists(epub_dir):
+        for filename in os.listdir(epub_dir):
+            epub_files.append(f"{epub_dir}/{filename}")
+    return (split_files, epub_files)
+
+def delete_split_epub_files(file_path):
+    splits, epubs = get_spit_epub_files(file_path)
+    all_files = splits + epubs
+    filename = os.path.basename(file_path)
+    split_dir = f'templates/split/{filename}'
+    epub_dir = get_epub_book_dir(filename)
+    # 删除
+    for filepath in all_files:
+        os.remove(filepath)
+    # 删除 split 文件夹
+    if os.path.exists(split_dir):
+        os.rmdir(split_dir)
+    # 删除 epub 文件夹
+    if os.path.exists(epub_dir):
+        os.rmdir(epub_dir)
+    os.remove(file_path)
+    return len(all_files) + 1
     
 if __name__ == '__main__':
     file_path = r'D:\\CODE\\Rust\\novel\\tmp.txt'

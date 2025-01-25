@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Covert to epub</title>
   <style>
     .flex-container {
       display: flex;
@@ -17,36 +17,57 @@
     .split-regex-wrapper {
       display: none;
     }
+
+    #cover-img {
+      width: 120px;
+    }
+  
   </style>
 </head>
 
 <body>
-  <p>Covert to ePub</p>
-  <div class="filelist">
-    <div id="file-list"></div>
-  </div>
-  <div class="control">
-    <div class='flex-container'>
-      <div>
-        <input type="checkbox" id="split-book"><label for="split-book">Split Book</label>
-      </div>
-      <label for="split-regex">Regex</label>
-      <input type="text" id="split-regex" value="第\s*(.*)章">
-      <div class="split-regex-wrapper">
-        <label for="split-count">Split Count</label>
-        <input type="number" id="count">
-      </div>
+  <div class="container">
+    <div>
+      <span>Covert to epub</span>
+      <a href="/">Back to Home</a>
     </div>
-  </div>
-  <div class="form">
-    <label for="title">Title</label>
-    <input type="text" id="title" value="">
-    <label for="author">Author</label>
-    <input type="text" id="author" value="">
-  </div>
-  <div><button id="cover-btn">Covert</button></div>
-  <div class="preview"></div>
+    <div class="filelist">
+      <div id="file-list"></div>
+    </div>
+
+    <div class='flex-col'>
+      <div class="form-item">
+        <label for="split-count">拆分数</label>
+        <input type="number" id="count" placeholder="按章节数拆分，留空则不拆分">
+      </div>
+      <div class="form-item">
+        <label for="split-regex">正则</label>
+        <input type="text" id="split-regex" value="第\s*(.*)章">
+      </div>
+      <div class="form-item">
+        <label for="title">标题</label>
+        <input type="text" id="title" value="">
+      </div>
+      <div class="form-item">
+        <label for="author">作者</label>
+        <input type="text" id="author" value="">
+      </div>
+      <div class="form-item">
+        <label for="upload-file">封面</label>
+        <input type="file" id="upload-cover" style="width: 200px;" accept="image/*">
+      </div>
+      <div class="form-item">
+        <label for="use-server-cover">使用服务器封面</label>
+        <input type="checkbox" id="use-server-cover" checked>
+      </div>
+      <div class="cover">
+        <img id="cover-img" src="" alt="Cover">
+      </div>
+      <div><button id="cover-btn">Covert</button></div>
+    </div>
+    <div class="preview"></div>
 </body>
+<link rel="stylesheet" href="/static/comm.css">
 <script src="/static/comm.js"></SCRIPT>
 <script src="/static/epub.js"></SCRIPT>
 

@@ -1,16 +1,21 @@
-function preview(data) {
-  const filepathEl = document.getElementsByClassName("filepath")[0];
-  const preview = document.getElementsByClassName("chapter-list")[0];
+function preview({chapters = [], filepath = ""}) {
+  const filepathWrapperEl = document.getElementsByClassName("filepath")[0];
+  const chapterListEl = document.getElementsByClassName("chapter-list")[0];
   const contentWrapperEl = document.getElementsByClassName("content-wrapper")[0];
-  filepathEl.innerHTML = "";
-  preview.innerHTML = "";
+  filepathWrapperEl.innerHTML = "";
+  chapterListEl.innerHTML = "";
   contentWrapperEl.innerHTML = "";
+  
+  const count = document.createElement("div");
+  count.innerHTML = `章节数: ${chapters.length}`;
+  filepathWrapperEl.appendChild(count);
+  if (chapters.length === 0) {
+    chapterListEl.style.display = "none";
+    return;
+  }
+  chapterListEl.style.display = "block";
 
-  const filepath = document.createElement("div");
-  filepath.innerHTML = `filepath:${data.filepath}`;
-  filepathEl.appendChild(filepath);
 
-  const chapters = data.chapters;
   const chapterList = document.createElement("ul");
   chapters.forEach(chapter => {
     const li = document.createElement("li");
@@ -23,7 +28,7 @@ function preview(data) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          filepath: data.filepath,
+          filepath,
           chapter_index: chapters.indexOf(chapter)
         })
       })
@@ -42,7 +47,7 @@ function preview(data) {
         .catch(error => console.error(error));
     });
   });
-  preview.appendChild(chapterList);
+  chapterListEl.appendChild(chapterList);
 
 }
 

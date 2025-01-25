@@ -4,23 +4,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Proc ebook</title>
 </head>
 
 <body>
 
-  <div>
-    <h2>Proc ebook</h2>
-    <a href="/page/format">format</a>
-    <a href="/page/txt">txt</a>
-    <a href="/page/split">split</a>
-    <a href="/page/epub">epub</a>
-    <div style="margin-top: 1rem;">
-      <input type="file" id="upload-file">
-    </div>
+  <div class="container">
+    <span>Proc ebook</span>
+      <div class="nav">
+        <a href="/page/format">format</a>
+        <a href="/page/parsechapter">parsechapter</a>
+        <a href="/page/split">split</a>
+        <a href="/page/epub">epub</a>
+      </div>
+      <div>
+        <input type="file" id="upload-file" accept=".txt">
+      </div>
+      <div>
+        <span>当前上传所有的文件：</span>
+        <button id="del-book" style="color: rgb(235, 63, 63);">删除</button>
+        <button id="download-book">下载</button>
+        <div id="file-list"></div>
+      </div>
   </div>
 </body>
-<script src="/static/comm.js"></SCRIPT>
+<link rel="stylesheet" href="/static/comm.css">
+<script src="/static/comm.js"></script>
 <script src="/static/index.js"></script>
 
 </html>
