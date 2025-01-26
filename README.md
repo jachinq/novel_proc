@@ -20,7 +20,14 @@ pip install -r requirements.txt
 
 # usage
 
-run the `run.bat` file to start the application.
+Fisrt, you need to install the required packages.
+
+```
+venv\Scripts\activate
+pip install -r requirements.txt 
+```
+
+And then run the `run.bat` file to start the application.
 
 The application will run on http://localhost:8000/
 
