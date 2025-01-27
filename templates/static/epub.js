@@ -57,7 +57,10 @@ function initEvents() {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.success) loadEpubFiles();
+        if (data.success) {
+          loadEpubFiles();
+          alert("转换成功");
+        }
         else alert("转换失败");
         coverBtn.disabled = false;
       })
