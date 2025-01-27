@@ -147,7 +147,8 @@ def get_epub_book_dir(title=''):
     return epub_path
 
 def convert_txt_to_epub(split_chapters: list, index, title, author, filename):
-    epub_path = f"{get_epub_book_dir(filename)}/{title}_{index}.epub"
+    title = f"{title}_{index}"
+    epub_path = f"{get_epub_book_dir(filename)}/{title}.epub"
 
     # 计算出章节数
     chapter_count = len(split_chapters)
