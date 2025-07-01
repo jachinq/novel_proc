@@ -157,10 +157,10 @@ async def read_chapter(request):
     file_path = json_data['filepath']
     chapter_index = json_data['chapter_index']
     if file_path not in temp_map:
-        return json({'error': '请先分章'})
+        return error('请先分章')
     chapters = temp_map[file_path]
     if chapter_index >= len(chapters):
-        return json({'error': '章节索引超出范围'})
+        return error(f'章节索引超出范围，总共{len(chapters)}章')
     chapter, contents = chapters[chapter_index]
     return json({'chapter': chapter, 'contents': contents, 'filename': file_path})
 
@@ -229,7 +229,7 @@ async def covert_book(request):
     filename = os.path.basename(file_path)
     
     # 将base64编码的图片数据保存到本地
-    if cover != None and cover.strip() != '' and not cover.startswith('/resources?filepath='):
+    if cover != None and cover.strip() != '' and not cover.startswith('http'):
         # cover 是有图片前缀的，需要去掉
         cover = cover.split(',')[1]
         # 保存图片到本地
@@ -251,7 +251,7 @@ async def covert_book(request):
             convert_txt_to_epub(sub_chapters, file_prefix, title, author, filename)
         
     else: # 不拆，直接转换整本书
-        convert_txt_to_epub(chapters, 1, title, author, filename)
+        convert_txt_to_epub(chapters, None, title, author, filename)
     
     
 

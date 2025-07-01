@@ -10,6 +10,25 @@ def error(message: str, data: dict = {}):
 def success(message='操作成功', data: dict = {}):
     return json({"success": True, "message": message, 'data': data})
 
+def is_special_chapter(chapter_name: str, chapterNameLimit: int = 40):
+    regex = "第\s*(.*)卷"
+    chapter_pattern = re.compile(regex)
+    if chapter_pattern.match(chapter_name) and len(chapter_name) <= chapterNameLimit:
+        return True
+    
+    # 特殊章节名
+    special_names = ['序章', '终章', '后记', '附录', '番外', '前言', '完本感言', '大结局']
+    # 章节名长度限制
+    if len(chapter_name) > chapterNameLimit:
+        return False
+    # 章节名是否以【特殊章节名+空格】开始
+    for name in special_names:
+        if chapter_name.startswith(name + ' ') or chapter_name == name or chapter_name.startswith(name + '（') or chapter_name.startswith(name + '：'):
+            return True
+    return False
+    
+    
+
 def split_chapter(regex, data: str, chapterNameLimit: int = 40):
     # 正则匹配章节标题
     chapter_pattern = re.compile(regex)
@@ -20,19 +39,23 @@ def split_chapter(regex, data: str, chapterNameLimit: int = 40):
     
     chapters = []
     contents = []
+    line_count = 0
     for line in data.split('\n'):
         # 去除前后空格
         line = line.strip()
+        isOverLimit = len(line) > chapterNameLimit
         
-        length = len(line)
-        isOverLimit = length > chapterNameLimit
-        
-        match = chapter_pattern.match(line)
-        if match and line.startswith('第') and not isOverLimit:
-            chapters.append((line, contents))
+        match = (chapter_pattern.match(line) or is_special_chapter(line, chapterNameLimit)) and not isOverLimit
+        if match:
+            # 如果首行不是章节标题，说明在匹配到前，是有一部分内容的，把这部分内容放到默认的一个章节里
+            if line_count != 0 and len(chapters) == 0 and len(contents) > 0:
+                chapters.append(('开头', contents))
             contents = []
+            if len(line) > 0:
+                chapters.append((line, contents))
         else:
-            contents.append(line)
+            contents.append(line)     
+        line_count += 1 # 行数递增
     
     if len(chapters) == 0:
         chapters.append(('Unkown', contents))
@@ -147,7 +170,8 @@ def get_epub_book_dir(title=''):
     return epub_path
 
 def convert_txt_to_epub(split_chapters: list, index, title, author, filename):
-    title = f"{title}_{index}"
+    if index != None:
+        title = f"{title}_{index}"
     epub_path = f"{get_epub_book_dir(filename)}/{title}.epub"
 
     # 计算出章节数

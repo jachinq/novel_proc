@@ -15,9 +15,9 @@ function preview({chapters = [], filepath = ""}) {
   }
   chapterListEl.style.display = "block";
 
-
   const chapterList = document.createElement("ul");
-  chapters.forEach(chapter => {
+  for (let i = 0; i < chapters.length; i++) {
+    const chapter = chapters[i];
     const li = document.createElement("li");
     li.innerHTML = chapter;
     chapterList.appendChild(li);
@@ -29,7 +29,7 @@ function preview({chapters = [], filepath = ""}) {
         },
         body: JSON.stringify({
           filepath,
-          chapter_index: chapters.indexOf(chapter)
+          chapter_index: i
         })
       })
         .then(response => response.json())
@@ -43,10 +43,13 @@ function preview({chapters = [], filepath = ""}) {
           contentWrapperEl.innerHTML = "";
           contentWrapperEl.appendChild(chapterTitle);
           contentWrapperEl.appendChild(content);
+          if (data.success === false) {
+            alert(data.message);
+          }
         })
         .catch(error => console.error(error));
     });
-  });
+  }
   chapterListEl.appendChild(chapterList);
 
 }
